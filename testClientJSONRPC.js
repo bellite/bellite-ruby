@@ -20,11 +20,13 @@ function createMockBelliteServer(ns) {
                 if (conn) conn.end() }) },
         allConnections: [] }
 
+    var debugLog = ns.debugLog
+
     self.server.on('listening', function () {
         var addr = this.address()
         self.env = addr.address+':'+addr.port+'/'+self.token
         process.env.BELLITE_SERVER = self.env
-        console.log('Serving BELLITE_SERVER="'+ process.env.BELLITE_SERVER +'"')
+        if (debugLog) debugLog('Serving BELLITE_SERVER="'+ process.env.BELLITE_SERVER +'"')
         ns.listening();
     })
 
@@ -36,7 +38,7 @@ function createMockBelliteServer(ns) {
 
         var api = {
             sendMessage: function(msg) {
-                console.log("server send: " + msg)
+                if (debugLog) debugLog('reply  ==> ', msg);
                 return conn.write(msg+'\0') },
             shutdown: function() { return conn.end() },
             fireEvent: function(evtType, selfId, evt, ctx) {
@@ -65,6 +67,7 @@ function createMockBelliteServer(ns) {
             connBuf = data.pop()
             while (data.length) {
                 var msg = data.shift();
+                if (debugLog) debugLog('invoke <== ', msg);
                 try { msg = JSON.parse(msg) }
                 catch (err) { tgt.parse_error(err, msg); continue }
                 if (msg.method!==undefined)
@@ -164,7 +167,7 @@ function testBelliteJSONRPC(opt, doneCallback) {
     };
 
     var test = createMockBelliteServer({
-        port: opt.port, token: opt.token,
+        port: opt.port, token: opt.token, debugLog: opt.debugLog,
         listening: function() {
             opt.execClient(spawnClient) },
         server_close: function() {},
@@ -174,16 +177,22 @@ function testBelliteJSONRPC(opt, doneCallback) {
     })
 
     function spawnClient(exec, args) {
-        var cp = require('child_process'),
-            proc = cp.spawn(exec, args, {stdio:'inherit'})
-        proc.on('exit', function(code, signal) {
+        var cp = require('child_process')
+        test.proc = cp.spawn(exec, args, {stdio:'inherit',cwd:__dirname})
+        test.proc.on('exit', function(code, signal) {
             log('process_exit', code, signal)
+            test.proc = false;
             done(code!==0 ? 'subprocess spawning error' : null) })
-        return proc }
+        return test.proc }
 
     function done(err) {
         if (done.timer)
-            clearTimeout(done.timer);
+            clearTimeout(done.timer)
+
+        if (test.proc) {
+            test.proc.kill()
+            test.proc = null
+        }
         if (test.shutdownTest) {
             test.shutdownTest()
             setTimeout(function() { doneCallback(err, opt.log, opt) }, 100)
@@ -199,8 +208,6 @@ exports.testBelliteJSONRPC = testBelliteJSONRPC;
 function assetTestResults(err, log, opt) {
     var assert=require('assert');
     try {
-        assert.equal(err, null, "terminated with an error")
-
         assert.equal(log.connect && log.connect.length, 1, "should connect exactly once")
         assert.equal(log.server_error, null, "should not experience server errors")
         assert.equal(log.conn_error, null, "should not experience connection errors")
@@ -222,6 +229,8 @@ function assetTestResults(err, log, opt) {
         assert.deepEqual(log.cmd_testEvent, [[0, 'testEvent', null]], "should call testEvent")
         assert.equal(log.dynamic_response && log.dynamic_response.length, 1, "should call dynamic_response from event")
 
+        assert.equal(err, null, "terminated with an error")
+
         console.log("All Bellite JSON-RPC protocol tests passed")
         process.exit(0) // success
 
@@ -242,13 +251,13 @@ exports.assetTestResults = assetTestResults;
 if (!module.parent) {
     // test the bellist JSON-RPC interactions
     testBelliteJSONRPC({
+        debugLog: console.log,
         timeout: 2000,
         //timeout: false,
         //port: 3099,
         //token: 'bellite-demo-host',
 
         execClient: function(spawn) {
-            //spawn('c:\\php-5.3.19\\php.exe', [__dirname+'/_doBelliteTest.php'])
             spawn('ruby', [__dirname+'/first_test.rb'])
         }
     }, assetTestResults)
