@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 require 'json'
 require 'socket'
+include Socket::Constants
 
 $id = 100
 
@@ -98,6 +99,7 @@ class Async
         end
 
         r,w,e = IO.select(readable, writable, excepted)
+        #puts r
         map.each do |obj|
             if obj.writable? and w.include? obj.fileno
                 obj.handle_write_event
@@ -166,6 +168,9 @@ class BelliteJsonRpcApi
         end
         if args.size == 1 and (args[0].instance_of? Hash or args[0].instance_of? Array)
             args = args[0]
+        end
+        if args == []
+            args = nil
         end
         if not selfId
             selfId = 0
@@ -271,12 +276,14 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def _recvJsonRpc(msgList)
+        #puts "_recvJsonRpc"
         msgList.each do |msg|
             begin
-                msg = JSON.parse(msg[0..-2])
+                #msg = JSON.parse(msg[0..-2])
+                msg = JSON.parse(msg)
                 isCall = msg.has_key?("method")
             rescue
-                puts "parse fail"
+                #puts "parse fail"
                 next
             end
             logRecv(msg)
@@ -291,6 +298,7 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def on_rpc_call(msg)
+        #puts "RPC CALL"
         if msg['method'] == 'event'
             args = msg['params']
             emit(args['evtType'], args)
@@ -298,6 +306,7 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def on_rpc_response(msg)
+        #puts "RPC RESPONSE"
         tgt = @_resultMap.delete msg['id']
         if tgt == nil
             return
@@ -311,18 +320,18 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def on_connect(cred)
-        puts "on connect"
+        #puts "on connect"
         auth(cred['token'])._then.call(method(:on_auth_succeeded), method(:on_auth_failed))
     end
 
     def on_auth_succeeded(msg)
-        puts "auth success"
+        #puts "auth success"
         emit('auth', true, msg)
         emit('ready')
     end
 
     def on_auth_failed(msg)
-        puts "auth fail"
+        #puts "auth fail"
         emit('auth', false, msg)
     end
 
@@ -337,6 +346,8 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     def on(key, fn=false)
         bindEvent = lambda do |fn|
             @_evtTypeMap.setdefault(key, []) << fn
+            #puts "on -> bindEvent:"
+            #puts @_evtTypeMap
             return fn
         end
         if not fn
@@ -347,13 +358,15 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def emit(key, *args)
+        #puts "EMIT with key: " + key
+        #puts @_evtTypeMap
         if @_evtTypeMap.has_key? key
             @_evtTypeMap[key].each do |fn|
-                #begin
+                begin
                     fn.call(self, *args)
-                #rescue
-                    #puts "EMIT exception"
-                #end
+                rescue
+                    puts "EMIT exception"
+                end
             end
         end
     end
@@ -372,6 +385,19 @@ class Bellite < BelliteJsonRpc
 
     def _connect(cred)
         @conn = TCPSocket.new cred['host'], cred['port']
+        #@conn = Socket.new(AF_INET, SOCK_STREAM, 0)
+        #@sockaddr = Socket.sockaddr_in(cred['port'], cred['host'])
+        #begin
+            #@conn.connect_nonblock(@sockaddr)
+        #rescue Errno::EINPROGRESS
+            #IO.select(nil, [@conn])
+            #begin
+                #@conn.connect_nonblock(@sockaddr)
+            #rescue Errno::EINVAL
+                #retry
+            #rescue Errno::EISCONN
+            #end
+        #end
         @buf = ""
 
         if @conn
@@ -401,7 +427,7 @@ class Bellite < BelliteJsonRpc
     end
 
     def close()
-        puts "CLOSED"
+        #puts "CLOSED"
         @conn.close
         @conn = false
         return true
@@ -420,15 +446,27 @@ class Bellite < BelliteJsonRpc
     end
 
     def handle_read_event()
+        #puts "handle_read_event"
         if not isConnected?
+            #puts "not connected in handle_read_event"
             return false
         end
 
         buf = @buf
         begin
             while true
-                part = @conn.recv(4096)
-##                puts '"' + part + '"'
+                begin
+                    part = @conn.recv_nonblock(4096)
+                rescue IO::WaitReadable
+                    #puts "WaitReadable"
+                    break
+                end
+                #puts 'PART + `' + part + '`'
+                #if part.index('}')
+                    #puts 'PART zero-terminator: ' + part.index('}')
+                #else
+                    #puts "Zero-terminator not found in part"
+                #end
                 if not part
                     #puts " CLOSE " + part
                     close()
@@ -441,11 +479,17 @@ class Bellite < BelliteJsonRpc
                 end
             end
         rescue
+            #puts "EXCEPTION"
         end
 
-##        puts buf
+##        puts bf
 
-        buf = buf.split('\0')
+        buf = buf.split("\0")
+        #puts "all readed BUF + "
+        #buf.each_with_index do |msg,i|
+            #puts "MSG " + i.to_s + ": " + msg
+        #end
+        #puts "after WHILE"
         #@buf = buf.pop()
         _recvJsonRpc(buf)
     end
@@ -600,13 +644,15 @@ app.ready Proc.new {
     app.bindEvent(118, "*")
     app.unbindEvent(118, "*")
 
-    app.on "testEvent" do |app, eobj|
+    app.on("testEvent", lambda { |app, eobj|
+        puts "TEST EVENT"
+        puts eobj
         if eobj['evt']
             app.perform(0, eobj['evt'])
         else
             app.close
         end
-    end
+    })
 
     app.bindEvent(0, "testEvent", 42, {'testCtx' => true})
     app.perform(0, "testEvent")
