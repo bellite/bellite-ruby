@@ -217,7 +217,7 @@ class BelliteJsonRpcApi
         raise NotImplementedError, "Subclass Responsibility"
     end
 
-    def _invoke(method, params=[])
+    def _invoke(method, params=nil)
         raise NotImplementedError, "Subclass Responsibility"
     end
 end
@@ -236,11 +236,11 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         @logging = logging
     end
 
-    def _notify(method, params=[])
+    def _notify(method, params=nil)
         return _sendJsonRpc(method, params)
     end
 
-    def _invoke(method, params=[])
+    def _invoke(method, params=nil)
         msgId = @_nextMsgId
         @_nextMsgId += 1
         res = _newResult(msgId)
@@ -254,8 +254,11 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         return res
     end
 
-    def _sendJsonRpc(method, params=[], msgId=false)
-        msg = {"jsonrpc" => "2.0", "method" => method, "params" => params}
+    def _sendJsonRpc(method, params=nil, msgId=false)
+        msg = {"jsonrpc" => "2.0", "method" => method}
+        if params
+            msg['params'] = params
+        end
         if msgId
             msg['id'] = msgId
         end
