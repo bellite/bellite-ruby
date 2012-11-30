@@ -388,19 +388,6 @@ class Bellite < BelliteJsonRpc
 
     def _connect(cred)
         @conn = TCPSocket.new cred['host'], cred['port']
-        #@conn = Socket.new(AF_INET, SOCK_STREAM, 0)
-        #@sockaddr = Socket.sockaddr_in(cred['port'], cred['host'])
-        #begin
-            #@conn.connect_nonblock(@sockaddr)
-        #rescue Errno::EINPROGRESS
-            #IO.select(nil, [@conn])
-            #begin
-                #@conn.connect_nonblock(@sockaddr)
-            #rescue Errno::EINVAL
-                #retry
-            #rescue Errno::EISCONN
-            #end
-        #end
         @buf = ""
 
         if @conn
@@ -578,7 +565,9 @@ def deferred()
     future = false
     reject = false
 
-    _then = lambda do |success=false, failure=false|
+    _then = lambda do |*args|
+        success = args[0] || false
+        failure = args[1] || false
         cb << [success,failure]
         if answer
             answer.call
@@ -589,25 +578,25 @@ def deferred()
     resolve = lambda do |result|
         while cb.size > 0
             success, failure = cb.pop()
-            #begin
+            begin
                 if success != false
                     res = success.call(result)
                     if res != false
                         result = res
                     end
                 end
-            #rescue Exception => err
-                #if failure != false
-                    #res = failure.call(err)
-                #elsif cb.size = 0
-                    ##excepthook
-                #end
-                #if res == false
-                    #return reject.call(err)
-                #else
-                    #return reject.call(res)
-                #end
-            #end
+            rescue Exception => err
+                if failure != false
+                    res = failure.call(err)
+                elsif cb.size = 0
+                    #excepthook
+                end
+                if res == false
+                    return reject.call(err)
+                else
+                    return reject.call(res)
+                end
+            end
         end
         answer = partial(resolve, result)
     end
@@ -615,19 +604,19 @@ def deferred()
     reject = lambda do |error|
         while cb.size > 0
             failure = cb.pop()[1]
-            #begin
+            begin
                 if failure != false
                     res = failure.call(error)
                     if res != false
                         error = res
                     end
                 end
-            #rescue Exception => err
-                #res = err
-                #if cb.size == 0
-                    ##excepthook
-                #end
-            #end
+            rescue Exception => err
+                res = err
+                if cb.size == 0
+                    #excepthook
+                end
+            end
         end
         answer = partial(reject, error)
     end
