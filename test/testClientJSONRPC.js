@@ -258,7 +258,7 @@ if (!module.parent) {
         //token: 'bellite-demo-host',
 
         execClient: function(spawn) {
-            spawn('ruby', [__dirname+'/first_test.rb'])
+            spawn('ruby', [__dirname+'/_doBelliteTest.rb'])
         }
     }, assetTestResults)
 }

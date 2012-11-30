@@ -3,45 +3,6 @@ require 'json'
 require 'socket'
 include Socket::Constants
 
-$id = 100
-
-def findCredentials(cred=false)
-    if not cred
-        cred = ENV['BELLITE_SERVER']
-        if not cred
-            cred = '127.0.0.1:3099/bellite-demo-host';
-            puts 'BELLITE_SERVER environment variable not found, using "'+cred+'"'
-        end
-    end
-    host, token = cred.split('/', 2)
-    host, port = host.split(':', 2)
-    return ({"credentials" => cred, "token" => token, "host" => host, "port" => Integer(port)})
-end
-
-def jsonRpcCall(host, port, method, params)
-    jsonString = JSON.fast_generate({"jsonrpc" => "2.0", "method" => method, "params" => params, "id" => $id})
-
-    socket = TCPSocket.new host, port
-    puts "send ==> " + jsonString
-    socket.puts jsonString + "\0"
-    answer = socket.gets
-    puts "recv <== " + answer
-    result = JSON.parse(answer[0..-2])
-
-    $id += 1
-    return result['result']
-end
-
-#credentials =  findCredentials()
-#result = jsonRpcCall(credentials['host'],credentials['port'],"ping",{"some" => "data", "and" => "and", "array" => [3,4,5]})
-#puts result[2]
-
-
-
-
-
-####^^^^ above just first test
-####vvvv below testing implementation of bellite json-rpc
 
 
 def partial(func, *args)
@@ -57,9 +18,6 @@ end
 def partialTest(a, b)
     puts a,  b
 end
-
-#latePartial = partial(method(:partialTest),"C","D")
-#latePartial.call("E")
 
 
 class Async
@@ -98,8 +56,11 @@ class Async
             return false
         end
 
-        r,w,e = IO.select(readable, writable, excepted)
-        #puts r
+        if (timeout)
+            r,w,e = IO.select(readable, writable, excepted,timeout)
+        else
+            r,w,e = IO.select(readable, writable, excepted)
+        end
         map.each do |obj|
             if obj.writable? and w.include? obj.fileno
                 obj.handle_write_event
@@ -115,8 +76,8 @@ class Async
         return r.size + w.size + e.size
     end
 
-    def Async.loop(map=false)
-        while Async.check(false, map) != false
+    def Async.loop(timeout,map=false)
+        while Async.check(timeout, map) != false
         end
     end
 end
@@ -279,14 +240,11 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def _recvJsonRpc(msgList)
-        #puts "_recvJsonRpc"
         msgList.each do |msg|
             begin
-                #msg = JSON.parse(msg[0..-2])
                 msg = JSON.parse(msg)
                 isCall = msg.has_key?("method")
             rescue
-                #puts "parse fail"
                 next
             end
             logRecv(msg)
@@ -301,7 +259,6 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def on_rpc_call(msg)
-        #puts "RPC CALL"
         if msg['method'] == 'event'
             args = msg['params']
             emit(args['evtType'], args)
@@ -309,7 +266,6 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def on_rpc_response(msg)
-        #puts "RPC RESPONSE"
         tgt = @_resultMap.delete msg['id']
         if tgt == nil
             return
@@ -323,18 +279,15 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def on_connect(cred)
-        #puts "on connect"
         auth(cred['token'])._then.call(method(:on_auth_succeeded), method(:on_auth_failed))
     end
 
     def on_auth_succeeded(msg)
-        #puts "auth success"
         emit('auth', true, msg)
         emit('ready')
     end
 
     def on_auth_failed(msg)
-        #puts "auth fail"
         emit('auth', false, msg)
     end
 
@@ -349,8 +302,6 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     def on(key, fn=false)
         bindEvent = lambda do |fn|
             @_evtTypeMap.setdefault(key, []) << fn
-            #puts "on -> bindEvent:"
-            #puts @_evtTypeMap
             return fn
         end
         if not fn
@@ -361,8 +312,6 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     end
 
     def emit(key, *args)
-        #puts "EMIT with key: " + key
-        #puts @_evtTypeMap
         if @_evtTypeMap.has_key? key
             @_evtTypeMap[key].each do |fn|
                 begin
@@ -381,12 +330,12 @@ end
 
 
 class Bellite < BelliteJsonRpc
-    #TODO: timeout variables
-    #
-    #
 
+
+    attr_accessor :timeout
 
     def _connect(cred)
+        @timeout = 0.5
         @conn = TCPSocket.new cred['host'], cred['port']
         @buf = ""
 
@@ -395,13 +344,11 @@ class Bellite < BelliteJsonRpc
         end
     end
 
-    def addAsyncMap(map=false)
-        #TODO
-    end
-
     def loop(timeout=0.5)
-        #TODO
-        Async.loop([self])
+        if timeout == false
+            timeout = @timeout
+        end
+        Async.loop(timeout, [self])
     end
 
     def _sendMessage(msg)
@@ -417,7 +364,6 @@ class Bellite < BelliteJsonRpc
     end
 
     def close()
-        #puts "CLOSED"
         @conn.close
         @conn = false
         return true
@@ -436,9 +382,7 @@ class Bellite < BelliteJsonRpc
     end
 
     def handle_read_event()
-        #puts "handle_read_event"
         if not isConnected?
-            #puts "not connected in handle_read_event"
             return false
         end
 
@@ -448,39 +392,22 @@ class Bellite < BelliteJsonRpc
                 begin
                     part = @conn.recv_nonblock(4096)
                 rescue IO::WaitReadable
-                    #puts "WaitReadable"
                     break
                 end
-                #puts 'PART + `' + part + '`'
-                #if part.index('}')
-                    #puts 'PART zero-terminator: ' + part.index('}')
-                #else
-                    #puts "Zero-terminator not found in part"
-                #end
                 if not part
-                    #puts " CLOSE " + part
                     close()
                     break
                 elsif part == ""
                     break
                 else
                     buf += part
-                    #puts " BUF + " +  buf 
                 end
             end
         rescue
-            #puts "EXCEPTION"
         end
 
-##        puts bf
 
         buf = buf.split("\0")
-        #puts "all readed BUF + "
-        #buf.each_with_index do |msg,i|
-            #puts "MSG " + i.to_s + ": " + msg
-        #end
-        #puts "after WHILE"
-        #@buf = buf.pop()
         _recvJsonRpc(buf)
     end
 
@@ -624,30 +551,3 @@ def deferred()
     future = Future.new _then, resolve, reject
     return future
 end
-
-
-app = Bellite.new
-app.ready Proc.new { 
-    puts "READY"
-    app.ping
-    app.version
-    app.perform(142, "echo", {"name" => [nil, true, 42, "value"]})
-
-    app.bindEvent(118, "*")
-    app.unbindEvent(118, "*")
-
-    app.on("testEvent", lambda { |app, eobj|
-        puts "TEST EVENT"
-        puts eobj
-        if eobj['evt']
-            app.perform(0, eobj['evt'])
-        else
-            app.close
-        end
-    })
-
-    app.bindEvent(0, "testEvent", 42, {'testCtx' => true})
-    app.perform(0, "testEvent")
-}
-
-app.loop
