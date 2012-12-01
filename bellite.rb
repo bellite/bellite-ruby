@@ -4,7 +4,15 @@ require 'socket'
 include Socket::Constants
 
 
-
+# Clone of {http://docs.python.org/2/library/functools.html#functools.partial Python functools.partial}
+#   Creates a lambda with passed func and applies to it args. Args can be overriden when this lambda called.
+#
+#@param [Function] func - func to be called with partial parameters
+#@param [Array] *args   - default parameters which should be passed to func
+#@return [Function] wrapper around func which passes *args or new args, passed to wrapper to func
+#
+#
+#
 def partial(func, *args)
     return  Proc.new do |*new_args|
         merged_params = args.clone()
@@ -15,14 +23,16 @@ def partial(func, *args)
     end
 end
 
-def partialTest(a, b)
-    puts a,  b
-end
 
-
+# Simple implementation of {http://docs.python.org/2/library/asyncore.html Python Asyncore}
 class Async
+    #!attribute @@map
+    #  List of objects, implements asyncore methods
     @@map = []
 
+    #Checks sockets from map objects using {IO.select}
+    #@param [Float] timeout timeout in seconds, passed to {IO.select}
+    #@param [Hash] map list of objects implements asyncore methods
     def Async.check(timeout=false, map=false)
         if not map
             map = @@map
@@ -76,13 +86,23 @@ class Async
         return r.size + w.size + e.size
     end
 
+    #Running check while at least one socket in objects map is connected
+    #@param [Float] timeout - timeout, passed to {.check}
+    #@param [Hash] map, passed to {.check}
     def Async.loop(timeout,map=false)
         while Async.check(timeout, map) != false
         end
     end
 end
 
+
+
+# Implements new pythonic {http://docs.python.org/2/library/stdtypes.html#dict.setdefault setdefault} method in ruby class Hash
 class Hash
+    #(see {Hash})
+    #@param key key of hash
+    #@param value value of key in hash
+    #@return [Value] if key in hash - hash value, attached to key; otherwise value, passed to setdefault
     def setdefault(key, value)
         if self[key] == nil
             self[key] = value
@@ -92,7 +112,10 @@ class Hash
 end
 
 
+# @abstract This is common interface of Bellite json-rpc API
 class BelliteJsonRpcApi
+    #Constructor. Connects to server with cred credentials
+    #@param [String] cred Credentials in format: 'host:port/token';
     def initialize(cred)
         cred = findCredentials(cred)
         if cred
@@ -100,25 +123,40 @@ class BelliteJsonRpcApi
         end
     end
 
+    #Authenticates with server using token
+    #@param [String] token Token to access server
+    #@return {Promise}
     def auth(token)
         return _invoke('auth', [token])
     end
 
+    #Server version
+    #@return {Promise} 
     def version
         return _invoke('version')
     end
 
+    #Ping server
+    #@return {Promise}
     def ping
         return _invoke('ping')
     end
 
+    #invokes respondsTo
+    #@param [Fixnum] selfId Id for internal use (events, for example)
+    #@param [Hash] cmd - some data, which can be encoded as JSON to pass to server
+    #@return {Promise}
     def respondsTo(selfId, cmd)
         if not selfId
             selfId = 0
         end
-        _invoke('respondsTo', [selfId, cmd])
+        return _invoke('respondsTo', [selfId, cmd])
     end
 
+    #perform JSON-RPC request 
+    #@param [String] cmd command
+    #@param [Array] *args Variable-length arguments, passed with cmd. :key => value ruby Hash parameter sugar also works
+    #@return [Promise]
     def perform(selfId, cmd, *args)
         if args.size > 1
             args.each do |arg|
@@ -139,6 +177,12 @@ class BelliteJsonRpcApi
         return _invoke('perform',[selfId, cmd, args])
     end
 
+    # binds Event on some evtType
+    #@param [Fixnum] selfId internal id
+    #@param [String] evtType type of event
+    #@param [Fixnum] res
+    #@param [Hash] ctx - context, passed to event handler
+    #@return [Promise]
     def bindEvent(selfId=0, evtType='*', res = -1, ctx=false)
         if not selfId
             selfId = 0
@@ -146,6 +190,10 @@ class BelliteJsonRpcApi
         return _invoke('bindEvent',[selfId, evtType, res, ctx])
     end
 
+    # Unbins Event on some evtType
+    #@param [Fixnum] selfId internal id
+    #@param [String] evtType type of event
+    #@return [Promise]
     def unbindEvent(selfId, evtType=false)
         if not selfId
             selfId = 0
@@ -154,6 +202,9 @@ class BelliteJsonRpcApi
     end
 
 
+    # Finds credentials in environment variable BELLITE_SERVER or in passed parameter
+    #@param [String] cred server credentials in format host:port/token
+    #@return [Hash] with credentials or false if failed
     def findCredentials(cred=false)
         if not cred
             cred = ENV['BELLITE_SERVER']
@@ -174,10 +225,16 @@ class BelliteJsonRpcApi
         end
     end
 
+    #@abstract Connecting to JSON-RPC server
+    #@param [String] host Host
+    #@param [Fixnum] port Port
     def _connect(host, port)
         raise NotImplementedError, "Subclass Responsibility"
     end
 
+    #@abstract Invokes method
+    #@param [String] method
+    #@param [Hash] Something JSONable to pass as ethod params
     def _invoke(method, params=nil)
         raise NotImplementedError, "Subclass Responsibility"
     end
@@ -188,6 +245,7 @@ end
 #
 
 
+#@abstract Next level of Bellite server API implementation: Basic operations with server like Bellite.
 class BelliteJsonRpc < BelliteJsonRpcApi
     def initialize(cred=false, logging=false)
         @_resultMap = {}
