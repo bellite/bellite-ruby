@@ -393,6 +393,9 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     #~ micro event implementation ~~~~~~~~~~~~~~~~~~~~~~~
     #
 
+    #Adds ready event handler
+    #@param [Function] fnReady Event hanlder lambda 
+    #@return [Function] Your event handler or bindEvent method to bind your handler later
     def ready(fnReady)
         return on('ready', fnReady)
     end
