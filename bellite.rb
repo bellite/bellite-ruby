@@ -437,11 +437,18 @@ end
 #
 
 
+#Main Bellite class to use
 class Bellite < BelliteJsonRpc
 
 
+#!attribute [rw] timeout 
+# Timeout of IO.select socket wait
+#@return [Float] Timeout value in seconds
     attr_accessor :timeout
 
+    #Connecting to JSON-RPC server
+    # Calls on_connect if connection successfull
+    #@param [Hash] cred Server credentials: port, host, token and original `credentials` string
     def _connect(cred)
         @timeout = 0.5
         @conn = TCPSocket.new cred['host'], cred['port']
@@ -452,6 +459,8 @@ class Bellite < BelliteJsonRpc
         end
     end
 
+    #Obtains responses from JSON-RPC server
+    #@param [Float] timeout Timeout, if false, @_timeout used
     def loop(timeout=0.5)
         if timeout == false
             timeout = @timeout
@@ -459,6 +468,9 @@ class Bellite < BelliteJsonRpc
         Async.loop(timeout, [self])
     end
 
+    #Sends message to server
+    #@param [String] msg JSON-encoded JSON-RPC call to send
+    #@return [Boolean] True if sent
     def _sendMessage(msg)
         if not isConnected?
             return false
@@ -468,16 +480,21 @@ class Bellite < BelliteJsonRpc
         return true
     end
 
+    #Checks, is connection still alive
+    #@return [Boolean] True if connection alive
     def isConnected?
         return @conn != false
     end
 
+    #Closing connection to JSON-RPC Server
     def close()
         @conn.close
         @conn = false
         return true
     end
 
+    #Returns TCPSocket connection for Async
+    #@return [TCPSocket] 
     def fileno()
         return @conn
     end
