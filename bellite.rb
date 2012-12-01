@@ -575,15 +575,25 @@ class Bellite < BelliteJsonRpc
     end
 end
 
+#@abstract Promise API
 class PromiseApi
+    #Runs then-function call with same function for success and failure
+    #@param [Function] fn Function to handle success or failure
+    #@return Result of then-function call
     def always(fn)
         return @_then.call(fn, fn)
     end
 
+    #Runs then-function in case of failure
+    #@param [Function] failure Failure handler
+    #@return Result of then-function call
     def fail(failure)
         return @_then.call(false, failure)
     end
 
+    #Runs then-function in case of success
+    #@param [Function] success Success handler
+    #@return Result of then-function call
     def done(success)
         return @_then.call(success,false)
     end
