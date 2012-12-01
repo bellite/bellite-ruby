@@ -14,4 +14,8 @@ Gem::Specification.new do |gem|
   gem.name          = "bellite"
   gem.require_paths = ["lib"]
   gem.version       = Bellite::VERSION
+
+
+  gem.add_development_dependency "redcarpet", "~> 1.17"
+  gem.add_development_dependency "yard", "~> 0.7.5"
 end

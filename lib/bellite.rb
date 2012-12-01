@@ -251,7 +251,7 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         @_resultMap = {}
         @_evtTypeMap = {}
         @_nextMsgId = 100
-        super (cred)
+        super(cred)
         @logging = logging
     end
 
