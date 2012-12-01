@@ -493,20 +493,27 @@ class Bellite < BelliteJsonRpc
         return true
     end
 
-    #Returns TCPSocket connection for Async
+    #Returns TCPSocket connection for {Async}
     #@return [TCPSocket] 
     def fileno()
         return @conn
     end
 
+    #Returns is this object readable for {Async}
+    #@return [Boolean]
     def readable?
         return true
     end
 
+    #Returns is this object can read out-of-band data for {Async}
+    #@return [Boolean]
     def exceptable?
         return false
     end
 
+    #Reads new data and runs {#_recvJsonRpc}
+    # This method called by {Async.loop}
+    #@return [Boolean]
     def handle_read_event()
         if not isConnected?
             return false
@@ -537,21 +544,32 @@ class Bellite < BelliteJsonRpc
         _recvJsonRpc(buf)
     end
 
+    #Returns is this object can write data to socket 
+    # This method called by {Async}
+    #@return [Boolean]
     def writable?()
         return false
     end
 
+    #Writes new data to socket
+    # Stub for {Async}
     def handle_write_event()
     end
 
+    #Handles out-of-band data
+    # This method can be called by {Async}. Closes connection if called
     def handle_expt_event()
         close()
     end
 
+    #Handles socket closing
+    # This method can be called by {Async}
     def handle_close()
         close()
     end
 
+    #Handles socket error
+    # This method can be called by {Async}. Closing connection
     def handle_error()
         close()
     end
