@@ -247,6 +247,9 @@ end
 
 #@abstract Next level of Bellite server API implementation: Basic operations with server like Bellite.
 class BelliteJsonRpc < BelliteJsonRpcApi
+    #constructor. 
+    #@param [String] cred Server credentials
+    #@param [Boolean] logging Logging flag
     def initialize(cred=false, logging=false)
         @_resultMap = {}
         @_evtTypeMap = {}
@@ -255,10 +258,18 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         @logging = logging
     end
 
+    #Notify JSON-RPC server by method call, but skip response
+    #@param [String] method Method to call
+    #@param [Hash,Array,String,Float,Fixnum] params parameters for method
+    #@return [Boolean] true if sent
     def _notify(method, params=nil)
         return _sendJsonRpc(method, params)
     end
 
+    #Calls JSON-RPC method
+    #@param [String] method Method to call
+    #@param [Hash,Array,String,Float,Fixnum] params parameters for method
+    #@return [Promise]
     def _invoke(method, params=nil)
         msgId = @_nextMsgId
         @_nextMsgId += 1
@@ -267,12 +278,20 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         return res.promise
     end
 
+    #returns new Promise object, attached to msgId 
+    #@param [Fixnum] msgId id of message for this result
+    #@return [Promise]
     def _newResult(msgId)
         res = deferred()
         @_resultMap[msgId] = res
         return res
     end
 
+    #Sends JSON-RPC call to server
+    #@param [String] method Method to call
+    #@param [Hash,Array,String,Float,Fixnum] params parameters for method
+    #@param [Fixnum] msgId Message Id. If default, it uses internal autoincrement counter
+    #@return [Boolean] True if sent
     def _sendJsonRpc(method, params=nil, msgId=false)
         msg = {"jsonrpc" => "2.0", "method" => method}
         if params
@@ -285,18 +304,27 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         return _sendMessage(JSON.fast_generate(msg))
     end
 
+    #Sends JSON-RPC string to server
+    #@param [String] msg JSON-encoded JSON-RPC call to send
+    #@return [Boolean] True if sent
     def _sendMessage(msg)
         raise NotImplementedError('Subclass Responsibility')
     end
 
+    #Puts send packets to STDOUT
+    #@param [String] msg Same as for _sendMessage
     def logSend(msg)
         puts "send ==> " + JSON.fast_generate(msg)
     end
 
+    #Puts received packets to STDOUT
+    #@param [String] msg Same as for _sendMessage
     def logRecv(msg)
         puts "recv ==> " + JSON.fast_generate(msg)
     end
 
+    #Receives JSON-RPC response or call from JSON-RPC Server
+    #@param [Array<String>] msgList Array of messages from Server
     def _recvJsonRpc(msgList)
         msgList.each do |msg|
             begin
@@ -316,6 +344,8 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         end
     end
 
+    #Called on JSON-RPC call FROM server.
+    #@param [String] msg Server response with call
     def on_rpc_call(msg)
         if msg['method'] == 'event'
             args = msg['params']
@@ -323,6 +353,8 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         end
     end
 
+    #Called on JSON-RPC response (not call) from Server
+    #@param [String] msg Server respon with data
     def on_rpc_response(msg)
         tgt = @_resultMap.delete msg['id']
         if tgt == nil
@@ -336,15 +368,23 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         end
     end
 
+    #Called on connect to remote JSON-RPC server. 
+    #@param [Hash] cred Server credentials: port, host, token and original `credentials` string
     def on_connect(cred)
         auth(cred['token'])._then.call(method(:on_auth_succeeded), method(:on_auth_failed))
     end
 
+    #Called when auth is successfully ended
+    # Emits 'auth' and 'ready' event handlers
+    #@param [String] msg Message from JSON-RPC server
     def on_auth_succeeded(msg)
         emit('auth', true, msg)
         emit('ready')
     end
 
+    #Called when auth is failed
+    # Emits 'auth' event handlers with fail flag
+    #@param [String] msg Message from JSON-RPC server
     def on_auth_failed(msg)
         emit('auth', false, msg)
     end
@@ -415,6 +455,7 @@ class Bellite < BelliteJsonRpc
         end
 
         @conn.puts(msg + "\0")
+        return true
     end
 
     def isConnected?

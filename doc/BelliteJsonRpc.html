@@ -139,7 +139,7 @@ server like Bellite.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#%40_resultMap+result+map%3D-instance_method" title="\#@_resultMap result map= (instance method)">- (Object) <strong>@_resultMap result map=</strong>(@_resultMapresultmap = (value)) </a>
+      <a href="#_invoke-instance_method" title="#_invoke (instance method)">- (Promise) <strong>_invoke</strong>(method, params = nil) </a>
     
 
     
@@ -147,16 +147,15 @@ server like Bellite.</p>
   
   
   
-    
-    
-  
   
   
   
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Calls JSON-RPC method.</p>
+</div></span>
   
 </li>
 
@@ -164,7 +163,7 @@ server like Bellite.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#_invoke-instance_method" title="#_invoke (instance method)">- (Object) <strong>_invoke</strong>(method, params = nil) </a>
+      <a href="#_newResult-instance_method" title="#_newResult (instance method)">- (Promise) <strong>_newResult</strong>(msgId) </a>
     
 
     
@@ -178,7 +177,9 @@ server like Bellite.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>returns new Promise object, attached to msgId.</p>
+</div></span>
   
 </li>
 
@@ -186,7 +187,7 @@ server like Bellite.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#_newResult-instance_method" title="#_newResult (instance method)">- (Object) <strong>_newResult</strong>(msgId) </a>
+      <a href="#_notify-instance_method" title="#_notify (instance method)">- (Boolean) <strong>_notify</strong>(method, params = nil) </a>
     
 
     
@@ -200,29 +201,9 @@ server like Bellite.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#_notify-instance_method" title="#_notify (instance method)">- (Object) <strong>_notify</strong>(method, params = nil) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Notify JSON-RPC server by method call, but skip response.</p>
+</div></span>
   
 </li>
 
@@ -252,7 +233,7 @@ server like Bellite.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#_sendJsonRpc-instance_method" title="#_sendJsonRpc (instance method)">- (Object) <strong>_sendJsonRpc</strong>(method, params = nil, msgId = false) </a>
+      <a href="#_sendJsonRpc-instance_method" title="#_sendJsonRpc (instance method)">- (Boolean) <strong>_sendJsonRpc</strong>(method, params = nil, msgId = false) </a>
     
 
     
@@ -266,7 +247,9 @@ server like Bellite.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Sends JSON-RPC call to server.</p>
+</div></span>
   
 </li>
 
@@ -335,7 +318,7 @@ server like Bellite.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>A new instance of BelliteJsonRpc.</p>
+<p>constructor.</p>
 </div></span>
   
 </li>
@@ -570,13 +553,53 @@ server like Bellite.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>A new instance of BelliteJsonRpc</p>
+<p>constructor.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>cred</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Server credentials</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>logging</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Logging flag</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -584,16 +607,16 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-251
-252
 253
 254
 255
 256
-257</pre>
+257
+258
+259</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 251</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 253</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='comma token'>,</span> <span class='rubyid_logging identifier id'>logging</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
     <span class='rubyid_@_resultMap ivar id'>@_resultMap</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
@@ -616,69 +639,90 @@ server like Bellite.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="@_resultMap result map=-instance_method">
+  <h3 class="signature first" id="_invoke-instance_method">
   
-    - (<tt>Object</tt>) <strong>@_resultMap result map=</strong>(@_resultMapresultmap = (value)) 
-  
-
+    - (<tt><span class='object_link'><a href="Promise.html" title="Promise (class)">Promise</a></span></tt>) <strong>_invoke</strong>(method, params = nil) 
   
 
   
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
 
-
-251
-252
-253
-254
-255
-256
-257</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 251</span>
-
-<span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='comma token'>,</span> <span class='rubyid_logging identifier id'>logging</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
-    <span class='rubyid_@_resultMap ivar id'>@_resultMap</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
-    <span class='rubyid_@_evtTypeMap ivar id'>@_evtTypeMap</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
-    <span class='rubyid_@_nextMsgId ivar id'>@_nextMsgId</span> <span class='assign token'>=</span> <span class='integer val'>100</span>
-    <span class='rubyid_super super kw'>super</span> <span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='rparen token'>)</span>
-    <span class='rubyid_@logging ivar id'>@logging</span> <span class='assign token'>=</span> <span class='rubyid_logging identifier id'>logging</span>
-<span class='rubyid_end end kw'>end</span>
-</pre>
-    </td>
-  </tr>
-</table>
-</div>
+  
+</h3><div class="docstring">
+  <div class="discussion">
     
-      <div class="method_details ">
-  <h3 class="signature " id="_invoke-instance_method">
-  
-    - (<tt>Object</tt>) <strong>_invoke</strong>(method, params = nil) 
-  
+<p>Calls JSON-RPC method</p>
 
-  
 
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
-</h3><table class="source_code">
+    <li>
+      
+        <span class='name'>method</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Method to call</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>parameters</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Hash.html" title="Hash (class)">Hash</a></span></tt>, <tt>Array</tt>, <tt>String</tt>, <tt>Float</tt>, <tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>for method</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Promise.html" title="Promise (class)">Promise</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-263
-264
-265
-266
-267
-268
-269</pre>
+273
+274
+275
+276
+277
+278
+279</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 263</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 273</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__invoke identifier id'>_invoke</span><span class='lparen token'>(</span><span class='rubyid_method identifier id'>method</span><span class='comma token'>,</span> <span class='rubyid_params identifier id'>params</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='rparen token'>)</span>
     <span class='rubyid_msgId identifier id'>msgId</span> <span class='assign token'>=</span> <span class='rubyid_@_nextMsgId ivar id'>@_nextMsgId</span>
@@ -696,26 +740,70 @@ server like Bellite.</p>
       <div class="method_details ">
   <h3 class="signature " id="_newResult-instance_method">
   
-    - (<tt>Object</tt>) <strong>_newResult</strong>(msgId) 
+    - (<tt><span class='object_link'><a href="Promise.html" title="Promise (class)">Promise</a></span></tt>) <strong>_newResult</strong>(msgId) 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>returns new Promise object, attached to msgId</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>msgId</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>id of message for this result</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Promise.html" title="Promise (class)">Promise</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-271
-272
-273
-274
-275</pre>
+284
+285
+286
+287
+288</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 271</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 284</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__newResult identifier id'>_newResult</span><span class='lparen token'>(</span><span class='rubyid_msgId identifier id'>msgId</span><span class='rparen token'>)</span>
     <span class='rubyid_res identifier id'>res</span> <span class='assign token'>=</span> <span class='rubyid_deferred identifier id'>deferred</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
@@ -731,24 +819,89 @@ server like Bellite.</p>
       <div class="method_details ">
   <h3 class="signature " id="_notify-instance_method">
   
-    - (<tt>Object</tt>) <strong>_notify</strong>(method, params = nil) 
+    - (<tt>Boolean</tt>) <strong>_notify</strong>(method, params = nil) 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Notify JSON-RPC server by method call, but skip response</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>method</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Method to call</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>parameters</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Hash.html" title="Hash (class)">Hash</a></span></tt>, <tt>Array</tt>, <tt>String</tt>, <tt>Float</tt>, <tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>for method</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>true if sent</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-259
-260
-261</pre>
+265
+266
+267</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 259</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 265</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__notify identifier id'>_notify</span><span class='lparen token'>(</span><span class='rubyid_method identifier id'>method</span><span class='comma token'>,</span> <span class='rubyid_params identifier id'>params</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='rparen token'>)</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid__sendJsonRpc identifier id'>_sendJsonRpc</span><span class='lparen token'>(</span><span class='rubyid_method identifier id'>method</span><span class='comma token'>,</span> <span class='rubyid_params identifier id'>params</span><span class='rparen token'>)</span>
@@ -774,27 +927,27 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-301
-302
-303
-304
-305
-306
-307
-308
-309
-310
-311
-312
-313
-314
-315
-316
-317
-318</pre>
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 301</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 319</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__recvJsonRpc identifier id'>_recvJsonRpc</span><span class='lparen token'>(</span><span class='rubyid_msgList identifier id'>msgList</span><span class='rparen token'>)</span>
     <span class='rubyid_msgList identifier id'>msgList</span><span class='dot token'>.</span><span class='rubyid_each identifier id'>each</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_msg identifier id'>msg</span><span class='bitor op'>|</span>
@@ -823,32 +976,115 @@ server like Bellite.</p>
       <div class="method_details ">
   <h3 class="signature " id="_sendJsonRpc-instance_method">
   
-    - (<tt>Object</tt>) <strong>_sendJsonRpc</strong>(method, params = nil, msgId = false) 
+    - (<tt>Boolean</tt>) <strong>_sendJsonRpc</strong>(method, params = nil, msgId = false) 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sends JSON-RPC call to server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>method</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Method to call</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>parameters</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Hash.html" title="Hash (class)">Hash</a></span></tt>, <tt>Array</tt>, <tt>String</tt>, <tt>Float</tt>, <tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>for method</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>msgId</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Message Id. If default, it uses internal autoincrement counter</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>True if sent</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-277
-278
-279
-280
-281
-282
-283
-284
-285
-286
-287</pre>
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 277</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 295</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__sendJsonRpc identifier id'>_sendJsonRpc</span><span class='lparen token'>(</span><span class='rubyid_method identifier id'>method</span><span class='comma token'>,</span> <span class='rubyid_params identifier id'>params</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='comma token'>,</span> <span class='rubyid_msgId identifier id'>msgId</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
     <span class='rubyid_msg identifier id'>msg</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='string val'>&quot;jsonrpc&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot;2.0&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;method&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='rubyid_method identifier id'>method</span><span class='rbrace token'>}</span>
@@ -882,12 +1118,12 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-289
-290
-291</pre>
+307
+308
+309</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 289</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 307</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__sendMessage identifier id'>_sendMessage</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_raise identifier id'>raise</span> <span class='rubyid_NotImplementedError constant id'>NotImplementedError</span><span class='lparen token'>(</span><span class='string val'>'Subclass Responsibility'</span><span class='rparen token'>)</span>
@@ -913,20 +1149,20 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-373
-374
-375
-376
-377
-378
-379
-380
-381
-382
-383</pre>
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 373</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 391</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_emit identifier id'>emit</span><span class='lparen token'>(</span><span class='rubyid_key identifier id'>key</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='rubyid_args identifier id'>args</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_@_evtTypeMap ivar id'>@_evtTypeMap</span><span class='dot token'>.</span><span class='rubyid_has_key? fid id'>has_key?</span> <span class='rubyid_key identifier id'>key</span>
@@ -960,12 +1196,12 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-297
-298
-299</pre>
+315
+316
+317</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 297</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 315</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_logRecv identifier id'>logRecv</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_puts identifier id'>puts</span> <span class='string val'>&quot;recv ==&gt; &quot;</span> <span class='plus op'>+</span> <span class='rubyid_JSON constant id'>JSON</span><span class='dot token'>.</span><span class='rubyid_fast_generate identifier id'>fast_generate</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
@@ -991,12 +1227,12 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-293
-294
-295</pre>
+311
+312
+313</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 293</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 311</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_logSend identifier id'>logSend</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_puts identifier id'>puts</span> <span class='string val'>&quot;send ==&gt; &quot;</span> <span class='plus op'>+</span> <span class='rubyid_JSON constant id'>JSON</span><span class='dot token'>.</span><span class='rubyid_fast_generate identifier id'>fast_generate</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
@@ -1022,20 +1258,20 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-361
-362
-363
-364
-365
-366
-367
-368
-369
-370
-371</pre>
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 361</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 379</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='rubyid_key identifier id'>key</span><span class='comma token'>,</span> <span class='rubyid_fn identifier id'>fn</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
     <span class='rubyid_bindEvent identifier id'>bindEvent</span> <span class='assign token'>=</span> <span class='rubyid_lambda identifier id'>lambda</span> <span class='rubyid_do do kw'>do</span> <span class='bitor op'>|</span><span class='rubyid_fn identifier id'>fn</span><span class='bitor op'>|</span>
@@ -1069,12 +1305,12 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-349
-350
-351</pre>
+367
+368
+369</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 349</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 367</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_on_auth_failed identifier id'>on_auth_failed</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_emit identifier id'>emit</span><span class='lparen token'>(</span><span class='string val'>'auth'</span><span class='comma token'>,</span> <span class='rubyid_false false kw'>false</span><span class='comma token'>,</span> <span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
@@ -1100,13 +1336,13 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-344
-345
-346
-347</pre>
+362
+363
+364
+365</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 344</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 362</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_on_auth_succeeded identifier id'>on_auth_succeeded</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_emit identifier id'>emit</span><span class='lparen token'>(</span><span class='string val'>'auth'</span><span class='comma token'>,</span> <span class='rubyid_true true kw'>true</span><span class='comma token'>,</span> <span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
@@ -1133,12 +1369,12 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-340
-341
-342</pre>
+358
+359
+360</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 340</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 358</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_on_connect identifier id'>on_connect</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='rparen token'>)</span>
     <span class='rubyid_auth identifier id'>auth</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='lbrack token'>[</span><span class='string val'>'token'</span><span class='rbrack token'>]</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='rubyid__then identifier id'>_then</span><span class='dot token'>.</span><span class='rubyid_call identifier id'>call</span><span class='lparen token'>(</span><span class='rubyid_method identifier id'>method</span><span class='lparen token'>(</span><span class='symbol val'>:on_auth_succeeded</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='rubyid_method identifier id'>method</span><span class='lparen token'>(</span><span class='symbol val'>:on_auth_failed</span><span class='rparen token'>)</span><span class='rparen token'>)</span>
@@ -1164,15 +1400,15 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-320
-321
-322
-323
-324
-325</pre>
+338
+339
+340
+341
+342
+343</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 320</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 338</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_on_rpc_call identifier id'>on_rpc_call</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_msg identifier id'>msg</span><span class='lbrack token'>[</span><span class='string val'>'method'</span><span class='rbrack token'>]</span> <span class='eq op'>==</span> <span class='string val'>'event'</span>
@@ -1201,21 +1437,21 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-327
-328
-329
-330
-331
-332
-333
-334
-335
-336
-337
-338</pre>
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 327</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 345</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_on_rpc_response identifier id'>on_rpc_response</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_tgt identifier id'>tgt</span> <span class='assign token'>=</span> <span class='rubyid_@_resultMap ivar id'>@_resultMap</span><span class='dot token'>.</span><span class='rubyid_delete identifier id'>delete</span> <span class='rubyid_msg identifier id'>msg</span><span class='lbrack token'>[</span><span class='string val'>'id'</span><span class='rbrack token'>]</span>
@@ -1261,12 +1497,12 @@ server like Bellite.</p>
       <pre class="lines">
 
 
-357
-358
-359</pre>
+375
+376
+377</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 357</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 375</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_ready identifier id'>ready</span><span class='lparen token'>(</span><span class='rubyid_fnReady identifier id'>fnReady</span><span class='rparen token'>)</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid_on identifier id'>on</span><span class='lparen token'>(</span><span class='string val'>'ready'</span><span class='comma token'>,</span> <span class='rubyid_fnReady identifier id'>fnReady</span><span class='rparen token'>)</span>
@@ -1282,7 +1518,7 @@ server like Bellite.</p>
 </div>
 
     <div id="footer">
-  Generated on Fri Nov 30 09:24:36 2012 by
+  Generated on Sat Dec  1 06:47:28 2012 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.8.7).
 </div>
