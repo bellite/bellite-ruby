@@ -5,5 +5,6 @@ YARD::Rake::YardocTask.new
 
 task :test do
   puts %x[node test/testClientJSONRPC.js]
+  puts "TEST passed with exit code: "
   puts $?.exitstatus
 end
