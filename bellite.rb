@@ -395,11 +395,15 @@ class BelliteJsonRpc < BelliteJsonRpcApi
 
     #Adds ready event handler
     #@param [Function] fnReady Event hanlder lambda 
-    #@return [Function] Your event handler or bindEvent method to bind your handler later
+    #@return [Function] Your event handler
     def ready(fnReady)
         return on('ready', fnReady)
     end
 
+    #Adds any event handler
+    #@param [String] key Event name like `ready`
+    #@param [Function] fn Function to bind on event
+    #@return [Function] Your event handler or bindEvent method to bind your handler later if you skip fn
     def on(key, fn=false)
         bindEvent = lambda do |fn|
             @_evtTypeMap.setdefault(key, []) << fn
@@ -412,6 +416,9 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         end
     end
 
+    #Calls event handler when event occured
+    #@param [String] key Event name like `ready`
+    #@param [Hash,Array,Float,String,Fixnum] *args Argument to pass to event handler(s).
     def emit(key, *args)
         if @_evtTypeMap.has_key? key
             @_evtTypeMap[key].each do |fn|
