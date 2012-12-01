@@ -599,17 +599,25 @@ class PromiseApi
     end
 end
 
+#Class implements promise/future promise
 class Promise < PromiseApi
+    #Constructing object with then-function
+    #@param [Function] _then Then-function
     def initialize(_then) 
         if _then
             @_then = _then
         end
     end
 
+    #Returns this object
+    #@return [Promise]
     def promise
         return self
     end
 
+    #@!attribute [r] _then
+    # Then-function
+    #@return [Proc,lambda]
     def _then
         @_then
     end
