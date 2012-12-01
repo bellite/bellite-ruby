@@ -101,9 +101,112 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Implements Future</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#promise-instance_method" title="#promise (instance method)">- (Promise) <strong>promise</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Promise object of this Future.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#reject-instance_method" title="#reject (instance method)">- (Proc, lambda) <strong>reject</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Failure-function.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#resolve-instance_method" title="#resolve (instance method)">- (Proc, lambda) <strong>resolve</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Success-function.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
 
 
 
@@ -136,74 +239,8 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>A new instance of Future.</p>
+<p>Constructing object with then, success and failure functions.</p>
 </div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#promise-instance_method" title="#promise (instance method)">- (Object) <strong>promise</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#reject-instance_method" title="#reject (instance method)">- (Object) <strong>reject</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#resolve-instance_method" title="#resolve (instance method)">- (Object) <strong>resolve</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -237,13 +274,69 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>A new instance of Future</p>
+<p>Constructing object with then, success and failure functions</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>_then</span>
+      
+      
+        <span class='type'>(<tt>Proc</tt>, <tt>lambda</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Then-function</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>resolve</span>
+      
+      
+        <span class='type'>(<tt>Proc</tt>, <tt>lambda</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Success-function</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>reject</span>
+      
+      
+        <span class='type'>(<tt>Proc</tt>, <tt>lambda</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Failure-function</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -251,18 +344,18 @@
       <pre class="lines">
 
 
-543
-544
-545
-546
-547
-548
-549
-550
-551</pre>
+629
+630
+631
+632
+633
+634
+635
+636
+637</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 543</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 629</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid__then identifier id'>_then</span><span class='comma token'>,</span> <span class='rubyid_resolve identifier id'>resolve</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='comma token'>,</span> <span class='rubyid_reject identifier id'>reject</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
     <span class='rubyid_@promise ivar id'>@promise</span> <span class='assign token'>=</span> <span class='rubyid_Promise constant id'>Promise</span><span class='dot token'>.</span><span class='rubyid_new identifier id'>new</span> <span class='rubyid__then identifier id'>_then</span>
@@ -281,32 +374,56 @@
   
 </div>
 
-
-  <div id="instance_method_details" class="method_details_list">
-    <h2>Instance Method Details</h2>
-
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
     
+      
+      <span id=""></span>
       <div class="method_details first">
   <h3 class="signature first" id="promise-instance_method">
   
-    - (<tt>Object</tt>) <strong>promise</strong> 
+    - (<tt><span class='object_link'><a href="Promise.html" title="Promise (class)">Promise</a></span></tt>) <strong>promise</strong>  <span class="extras">(readonly)</span>
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Promise object of this Future</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Promise.html" title="Promise (class)">Promise</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-561
-562
-563</pre>
+657
+658
+659</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 561</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 657</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_promise identifier id'>promise</span>
     <span class='rubyid_@promise ivar id'>@promise</span>
@@ -317,27 +434,53 @@
 </table>
 </div>
     
+      
+      <span id=""></span>
       <div class="method_details ">
   <h3 class="signature " id="reject-instance_method">
   
-    - (<tt>Object</tt>) <strong>reject</strong> 
+    - (<tt>Proc</tt>, <tt>lambda</tt>) <strong>reject</strong>  <span class="extras">(readonly)</span>
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Failure-function</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Proc</tt>, <tt>lambda</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-557
-558
-559</pre>
+650
+651
+652</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 557</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 650</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_reject identifier id'>reject</span>
     <span class='rubyid_@reject ivar id'>@reject</span>
@@ -348,27 +491,53 @@
 </table>
 </div>
     
+      
+      <span id=""></span>
       <div class="method_details ">
   <h3 class="signature " id="resolve-instance_method">
   
-    - (<tt>Object</tt>) <strong>resolve</strong> 
+    - (<tt>Proc</tt>, <tt>lambda</tt>) <strong>resolve</strong>  <span class="extras">(readonly)</span>
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Success-function</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Proc</tt>, <tt>lambda</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-553
-554
-555</pre>
+643
+644
+645</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 553</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 643</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_resolve identifier id'>resolve</span>
     <span class='rubyid_@resolve ivar id'>@resolve</span>
@@ -381,10 +550,11 @@
     
   </div>
 
+
 </div>
 
     <div id="footer">
-  Generated on Sat Dec  1 06:47:29 2012 by
+  Generated on Sat Dec  1 07:53:54 2012 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.8.7).
 </div>

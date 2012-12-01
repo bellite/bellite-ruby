@@ -448,15 +448,15 @@ parameter.</p>
       <pre class="lines">
 
 
+116
+117
+118
 119
 120
-121
-122
-123
-124</pre>
+121</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 119</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 116</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='rparen token'>)</span>
     <span class='rubyid_cred identifier id'>cred</span> <span class='assign token'>=</span> <span class='rubyid_findCredentials identifier id'>findCredentials</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='rparen token'>)</span>
@@ -556,12 +556,12 @@ parameter.</p>
       <pre class="lines">
 
 
-231
-232
-233</pre>
+228
+229
+230</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 231</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 228</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__connect identifier id'>_connect</span><span class='lparen token'>(</span><span class='rubyid_host identifier id'>host</span><span class='comma token'>,</span> <span class='rubyid_port identifier id'>port</span><span class='rparen token'>)</span>
     <span class='rubyid_raise identifier id'>raise</span> <span class='rubyid_NotImplementedError constant id'>NotImplementedError</span><span class='comma token'>,</span> <span class='string val'>&quot;Subclass Responsibility&quot;</span>
@@ -610,16 +610,18 @@ parameter.</p>
   
     <li>
       
-        <span class='name'>Something</span>
+        <span class='name'>params</span>
       
       
         <span class='type'>(<tt><span class='object_link'><a href="Hash.html" title="Hash (class)">Hash</a></span></tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>JSONable to pass as ethod params</p>
+<p>Something JSONable to pass as ethod params</p>
 </div>
       
     </li>
@@ -646,12 +648,12 @@ parameter.</p>
       <pre class="lines">
 
 
-238
-239
-240</pre>
+235
+236
+237</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 238</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 235</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__invoke identifier id'>_invoke</span><span class='lparen token'>(</span><span class='rubyid_method identifier id'>method</span><span class='comma token'>,</span> <span class='rubyid_params identifier id'>params</span><span class='assign token'>=</span><span class='rubyid_nil nil kw'>nil</span><span class='rparen token'>)</span>
     <span class='rubyid_raise identifier id'>raise</span> <span class='rubyid_NotImplementedError constant id'>NotImplementedError</span><span class='comma token'>,</span> <span class='string val'>&quot;Subclass Responsibility&quot;</span>
@@ -721,12 +723,12 @@ parameter.</p>
       <pre class="lines">
 
 
-129
-130
-131</pre>
+126
+127
+128</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 129</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 126</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_auth identifier id'>auth</span><span class='lparen token'>(</span><span class='rubyid_token identifier id'>token</span><span class='rparen token'>)</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid__invoke identifier id'>_invoke</span><span class='lparen token'>(</span><span class='string val'>'auth'</span><span class='comma token'>,</span> <span class='lbrack token'>[</span><span class='rubyid_token identifier id'>token</span><span class='rbrack token'>]</span><span class='rparen token'>)</span>
@@ -848,15 +850,15 @@ parameter.</p>
       <pre class="lines">
 
 
+183
+184
+185
 186
 187
-188
-189
-190
-191</pre>
+188</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 186</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 183</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_bindEvent identifier id'>bindEvent</span><span class='lparen token'>(</span><span class='rubyid_selfId identifier id'>selfId</span><span class='assign token'>=</span><span class='integer val'>0</span><span class='comma token'>,</span> <span class='rubyid_evtType identifier id'>evtType</span><span class='assign token'>=</span><span class='string val'>'*'</span><span class='comma token'>,</span> <span class='rubyid_res identifier id'>res</span> <span class='assign token'>=</span> <span class='integer val'>-1</span><span class='comma token'>,</span> <span class='rubyid_ctx identifier id'>ctx</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_not not kw'>not</span> <span class='rubyid_selfId identifier id'>selfId</span>
@@ -937,6 +939,9 @@ parameter</p>
       <pre class="lines">
 
 
+205
+206
+207
 208
 209
 210
@@ -952,13 +957,10 @@ parameter</p>
 220
 221
 222
-223
-224
-225
-226</pre>
+223</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 208</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 205</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_findCredentials identifier id'>findCredentials</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_not not kw'>not</span> <span class='rubyid_cred identifier id'>cred</span>
@@ -1061,6 +1063,9 @@ parameter sugar also works</p>
       <pre class="lines">
 
 
+157
+158
+159
 160
 161
 162
@@ -1076,13 +1081,10 @@ parameter sugar also works</p>
 172
 173
 174
-175
-176
-177
-178</pre>
+175</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 160</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 157</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_perform identifier id'>perform</span><span class='lparen token'>(</span><span class='rubyid_selfId identifier id'>selfId</span><span class='comma token'>,</span> <span class='rubyid_cmd identifier id'>cmd</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='rubyid_args identifier id'>args</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_args identifier id'>args</span><span class='dot token'>.</span><span class='rubyid_size identifier id'>size</span> <span class='gt op'>&gt;</span> <span class='integer val'>1</span>
@@ -1148,12 +1150,12 @@ parameter sugar also works</p>
       <pre class="lines">
 
 
-141
-142
-143</pre>
+138
+139
+140</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 141</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 138</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_ping identifier id'>ping</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid__invoke identifier id'>_invoke</span><span class='lparen token'>(</span><span class='string val'>'ping'</span><span class='rparen token'>)</span>
@@ -1240,15 +1242,15 @@ parameter sugar also works</p>
       <pre class="lines">
 
 
+146
+147
+148
 149
 150
-151
-152
-153
-154</pre>
+151</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 149</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 146</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_respondsTo identifier id'>respondsTo</span><span class='lparen token'>(</span><span class='rubyid_selfId identifier id'>selfId</span><span class='comma token'>,</span> <span class='rubyid_cmd identifier id'>cmd</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_not not kw'>not</span> <span class='rubyid_selfId identifier id'>selfId</span>
@@ -1339,15 +1341,15 @@ parameter sugar also works</p>
       <pre class="lines">
 
 
+194
+195
+196
 197
 198
-199
-200
-201
-202</pre>
+199</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 197</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 194</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_unbindEvent identifier id'>unbindEvent</span><span class='lparen token'>(</span><span class='rubyid_selfId identifier id'>selfId</span><span class='comma token'>,</span> <span class='rubyid_evtType identifier id'>evtType</span><span class='assign token'>=</span><span class='rubyid_false false kw'>false</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_not not kw'>not</span> <span class='rubyid_selfId identifier id'>selfId</span>
@@ -1400,12 +1402,12 @@ parameter sugar also works</p>
       <pre class="lines">
 
 
-135
-136
-137</pre>
+132
+133
+134</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 135</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 132</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_version identifier id'>version</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid__invoke identifier id'>_invoke</span><span class='lparen token'>(</span><span class='string val'>'version'</span><span class='rparen token'>)</span>
@@ -1421,7 +1423,7 @@ parameter sugar also works</p>
 </div>
 
     <div id="footer">
-  Generated on Sat Dec  1 06:47:28 2012 by
+  Generated on Sat Dec  1 07:53:51 2012 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.8.7).
 </div>

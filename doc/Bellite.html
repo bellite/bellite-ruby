@@ -103,7 +103,18 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Main Bellite class to use</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -113,7 +124,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#timeout-instance_method" title="#timeout (instance method)">- (Object) <strong>timeout</strong> </a>
+      <a href="#timeout-instance_method" title="#timeout (instance method)">- (Float) <strong>timeout</strong> </a>
     
 
     
@@ -131,7 +142,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute timeout.</p>
+<p>Timeout of IO.select socket wait.</p>
 </div></span>
   
 </li>
@@ -167,7 +178,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Connecting to JSON-RPC server Calls on_connect if connection successfull.</p>
+</div></span>
   
 </li>
 
@@ -175,7 +188,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#_sendMessage-instance_method" title="#_sendMessage (instance method)">- (Object) <strong>_sendMessage</strong>(msg) </a>
+      <a href="#_sendMessage-instance_method" title="#_sendMessage (instance method)">- (Boolean) <strong>_sendMessage</strong>(msg) </a>
     
 
     
@@ -189,7 +202,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Sends message to server.</p>
+</div></span>
   
 </li>
 
@@ -211,7 +226,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Closing connection to JSON-RPC Server.</p>
+</div></span>
   
 </li>
 
@@ -233,7 +250,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns is this object can read out-of-band data for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -241,7 +260,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#fileno-instance_method" title="#fileno (instance method)">- (Object) <strong>fileno</strong> </a>
+      <a href="#fileno-instance_method" title="#fileno (instance method)">- (TCPSocket) <strong>fileno</strong> </a>
     
 
     
@@ -255,7 +274,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns TCPSocket connection for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -277,7 +298,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Handles socket closing This method can be called by <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -299,7 +322,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Handles socket error This method can be called by <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -321,7 +346,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Handles out-of-band data This method can be called by <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -329,7 +356,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#handle_read_event-instance_method" title="#handle_read_event (instance method)">- (Object) <strong>handle_read_event</strong> </a>
+      <a href="#handle_read_event-instance_method" title="#handle_read_event (instance method)">- (Boolean) <strong>handle_read_event</strong> </a>
     
 
     
@@ -343,7 +370,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Reads new data and runs <span class='object_link'><a href="BelliteJsonRpc.html#_recvJsonRpc-instance_method" title="BelliteJsonRpc#_recvJsonRpc (method)">BelliteJsonRpc#_recvJsonRpc</a></span> This method called by <span class='object_link'><a href="Async.html#loop-class_method" title="Async.loop (method)">Async.loop</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -365,7 +394,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Writes new data to socket Stub for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -387,7 +418,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Checks, is connection still alive.</p>
+</div></span>
   
 </li>
 
@@ -409,7 +442,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Obtains responses from JSON-RPC server.</p>
+</div></span>
   
 </li>
 
@@ -431,7 +466,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns is this object readable for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -453,7 +490,10 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns is this object can write data to socket  This method called by
+<span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>.</p>
+</div></span>
   
 </li>
 
@@ -498,7 +538,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="timeout-instance_method">
   
-    - (<tt>Object</tt>) <strong>timeout</strong> 
+    - (<tt>Float</tt>) <strong>timeout</strong> 
   
 
   
@@ -507,13 +547,31 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute timeout</p>
+<p>Timeout of IO.select socket wait</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Timeout value in seconds</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -521,12 +579,12 @@
       <pre class="lines">
 
 
-412
-413
-414</pre>
+444
+445
+446</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 412</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 444</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_timeout identifier id'>timeout</span>
   <span class='rubyid_@timeout ivar id'>@timeout</span>
@@ -553,24 +611,55 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Connecting to JSON-RPC server Calls on_connect if connection successfull</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>cred</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Hash.html" title="Hash (class)">Hash</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Server credentials: port, host, token and original `credentials` string</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-414
-415
-416
-417
-418
-419
-420
-421
-422</pre>
+449
+450
+451
+452
+453
+454
+455
+456
+457</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 414</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 449</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__connect identifier id'>_connect</span><span class='lparen token'>(</span><span class='rubyid_cred identifier id'>cred</span><span class='rparen token'>)</span>
     <span class='rubyid_@timeout ivar id'>@timeout</span> <span class='assign token'>=</span> <span class='integer val'>0</span><span class='integer val'>.5</span>
@@ -590,29 +679,78 @@
       <div class="method_details ">
   <h3 class="signature " id="_sendMessage-instance_method">
   
-    - (<tt>Object</tt>) <strong>_sendMessage</strong>(msg) 
+    - (<tt>Boolean</tt>) <strong>_sendMessage</strong>(msg) 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sends message to server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>msg</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>JSON-encoded JSON-RPC call to send</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>True if sent</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-431
-432
-433
-434
-435
-436
-437
-438</pre>
+471
+472
+473
+474
+475
+476
+477
+478</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 431</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 471</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid__sendMessage identifier id'>_sendMessage</span><span class='lparen token'>(</span><span class='rubyid_msg identifier id'>msg</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_not not kw'>not</span> <span class='rubyid_isConnected? fid id'>isConnected?</span>
@@ -637,20 +775,31 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Closing connection to JSON-RPC Server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-444
-445
-446
-447
-448</pre>
+487
+488
+489
+490
+491</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 444</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 487</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_close identifier id'>close</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
     <span class='rubyid_@conn ivar id'>@conn</span><span class='dot token'>.</span><span class='rubyid_close identifier id'>close</span>
@@ -675,6 +824,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns is this object can read out-of-band data for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span></p>
+
 
   </div>
 </div>
@@ -700,12 +851,12 @@
       <pre class="lines">
 
 
-458
-459
-460</pre>
+507
+508
+509</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 458</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 507</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_exceptable? fid id'>exceptable?</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid_false false kw'>false</span>
@@ -719,24 +870,48 @@
       <div class="method_details ">
   <h3 class="signature " id="fileno-instance_method">
   
-    - (<tt>Object</tt>) <strong>fileno</strong> 
+    - (<tt>TCPSocket</tt>) <strong>fileno</strong> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns TCPSocket connection for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TCPSocket</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-450
-451
-452</pre>
+495
+496
+497</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 450</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 495</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_fileno identifier id'>fileno</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid_@conn ivar id'>@conn</span>
@@ -756,18 +931,29 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Handles socket closing This method can be called by <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-503
-504
-505</pre>
+564
+565
+566</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 503</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 564</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_handle_close identifier id'>handle_close</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
     <span class='rubyid_close identifier id'>close</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
@@ -787,18 +973,30 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Handles socket error This method can be called by <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>. Closing
+connection</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-507
-508
-509</pre>
+570
+571
+572</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 507</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 570</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_handle_error identifier id'>handle_error</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
     <span class='rubyid_close identifier id'>close</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
@@ -818,18 +1016,30 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Handles out-of-band data This method can be called by <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span>. Closes
+connection if called</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-499
-500
-501</pre>
+558
+559
+560</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 499</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 558</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_handle_expt_event identifier id'>handle_expt_event</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
     <span class='rubyid_close identifier id'>close</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
@@ -843,50 +1053,74 @@
       <div class="method_details ">
   <h3 class="signature " id="handle_read_event-instance_method">
   
-    - (<tt>Object</tt>) <strong>handle_read_event</strong> 
+    - (<tt>Boolean</tt>) <strong>handle_read_event</strong> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Reads new data and runs <span class='object_link'><a href="BelliteJsonRpc.html#_recvJsonRpc-instance_method" title="BelliteJsonRpc#_recvJsonRpc (method)">BelliteJsonRpc#_recvJsonRpc</a></span> This method called by <span class='object_link'><a href="Async.html#loop-class_method" title="Async.loop (method)">Async.loop</a></span></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-462
-463
-464
-465
-466
-467
-468
-469
-470
-471
-472
-473
-474
-475
-476
-477
-478
-479
-480
-481
-482
-483
-484
-485
-486
-487
-488
-489
-490</pre>
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 462</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 514</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_handle_read_event identifier id'>handle_read_event</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_not not kw'>not</span> <span class='rubyid_isConnected? fid id'>isConnected?</span>
@@ -932,17 +1166,28 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Writes new data to socket Stub for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-496
-497</pre>
+553
+554</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 496</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 553</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_handle_write_event identifier id'>handle_write_event</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
 <span class='rubyid_end end kw'>end</span>
@@ -964,6 +1209,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Checks, is connection still alive</p>
+
 
   </div>
 </div>
@@ -979,6 +1226,11 @@
       
       
       
+        &mdash;
+        <div class='inline'>
+<p>True if connection alive</p>
+</div>
+      
     </li>
   
 </ul>
@@ -989,12 +1241,12 @@
       <pre class="lines">
 
 
-440
-441
-442</pre>
+482
+483
+484</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 440</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 482</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_isConnected? fid id'>isConnected?</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid_@conn ivar id'>@conn</span> <span class='neq op'>!=</span> <span class='rubyid_false false kw'>false</span>
@@ -1014,21 +1266,54 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Obtains responses from JSON-RPC server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>timeout</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0.5</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Timeout, if false, @_timeout used</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-424
-425
-426
-427
-428
-429</pre>
+461
+462
+463
+464
+465
+466</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 424</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 461</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_loop identifier id'>loop</span><span class='lparen token'>(</span><span class='rubyid_timeout identifier id'>timeout</span><span class='assign token'>=</span><span class='integer val'>0</span><span class='integer val'>.5</span><span class='rparen token'>)</span>
     <span class='rubyid_if if kw'>if</span> <span class='rubyid_timeout identifier id'>timeout</span> <span class='eq op'>==</span> <span class='rubyid_false false kw'>false</span>
@@ -1054,6 +1339,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns is this object readable for <span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span></p>
+
 
   </div>
 </div>
@@ -1079,12 +1366,12 @@
       <pre class="lines">
 
 
-454
-455
-456</pre>
+501
+502
+503</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 454</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 501</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_readable? fid id'>readable?</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid_true true kw'>true</span>
@@ -1107,6 +1394,9 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns is this object can write data to socket  This method called by
+<span class='object_link'><a href="Async.html" title="Async (class)">Async</a></span></p>
+
 
   </div>
 </div>
@@ -1132,12 +1422,12 @@
       <pre class="lines">
 
 
-492
-493
-494</pre>
+547
+548
+549</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'bellite.rb', line 492</span>
+      <pre class="code"><span class="info file"># File 'bellite.rb', line 547</span>
 
 <span class='rubyid_def def kw'>def</span> <span class='rubyid_writable? fid id'>writable?</span><span class='lparen token'>(</span><span class='rparen token'>)</span>
     <span class='rubyid_return return kw'>return</span> <span class='rubyid_false false kw'>false</span>
@@ -1153,7 +1443,7 @@
 </div>
 
     <div id="footer">
-  Generated on Sat Dec  1 06:47:29 2012 by
+  Generated on Sat Dec  1 07:53:53 2012 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.8.7).
 </div>
