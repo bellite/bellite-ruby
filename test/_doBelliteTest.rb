@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-require 'bellite'
+require '../lib/bellite.rb'
 app = Bellite.new
 app.ready Proc.new { 
     puts "READY"
