@@ -4,8 +4,8 @@ require File.expand_path('../lib/bellite/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Ivan"]
   gem.email         = ["asmer@asmer.org.ua"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = "Bellite JSON-RPC Client library"
+  gem.summary       = "Implements connection to JSON-RPC server, calling remote methods and bindings to server events"
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
