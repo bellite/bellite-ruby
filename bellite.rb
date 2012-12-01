@@ -7,12 +7,9 @@ include Socket::Constants
 # Clone of {http://docs.python.org/2/library/functools.html#functools.partial Python functools.partial}
 #   Creates a lambda with passed func and applies to it args. Args can be overriden when this lambda called.
 #
-#@param [Function] func - func to be called with partial parameters
+#@param [Proc] func - func to be called with partial parameters
 #@param [Array] *args   - default parameters which should be passed to func
-#@return [Function] wrapper around func which passes *args or new args, passed to wrapper to func
-#
-#
-#
+#@return [Proc] wrapper around func which passes *args or new args, passed to wrapper to func
 def partial(func, *args)
     return  Proc.new do |*new_args|
         merged_params = args.clone()
@@ -234,7 +231,7 @@ class BelliteJsonRpcApi
 
     #@abstract Invokes method
     #@param [String] method
-    #@param [Hash] Something JSONable to pass as ethod params
+    #@param [Hash] params Something JSONable to pass as ethod params
     def _invoke(method, params=nil)
         raise NotImplementedError, "Subclass Responsibility"
     end
@@ -394,16 +391,16 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     #
 
     #Adds ready event handler
-    #@param [Function] fnReady Event hanlder lambda 
-    #@return [Function] Your event handler
+    #@param [Proc] fnReady Event hanlder lambda 
+    #@return [Proc] Your event handler
     def ready(fnReady)
         return on('ready', fnReady)
     end
 
     #Adds any event handler
     #@param [String] key Event name like `ready`
-    #@param [Function] fn Function to bind on event
-    #@return [Function] Your event handler or bindEvent method to bind your handler later if you skip fn
+    #@param [Proc] fn Function to bind on event
+    #@return [Proc] Your event handler or bindEvent method to bind your handler later if you skip fn
     def on(key, fn=false)
         bindEvent = lambda do |fn|
             @_evtTypeMap.setdefault(key, []) << fn
@@ -578,21 +575,21 @@ end
 #@abstract Promise API
 class PromiseApi
     #Runs then-function call with same function for success and failure
-    #@param [Function] fn Function to handle success or failure
+    #@param [Proc] fn Function to handle success or failure
     #@return Result of then-function call
     def always(fn)
         return @_then.call(fn, fn)
     end
 
     #Runs then-function in case of failure
-    #@param [Function] failure Failure handler
+    #@param [Proc] failure Failure handler
     #@return Result of then-function call
     def fail(failure)
         return @_then.call(false, failure)
     end
 
     #Runs then-function in case of success
-    #@param [Function] success Success handler
+    #@param [Proc] success Success handler
     #@return Result of then-function call
     def done(success)
         return @_then.call(success,false)
@@ -602,7 +599,7 @@ end
 #Class implements promise/future promise
 class Promise < PromiseApi
     #Constructing object with then-function
-    #@param [Function] _then Then-function
+    #@param [Proc] _then Then-function
     def initialize(_then) 
         if _then
             @_then = _then
@@ -623,7 +620,12 @@ class Promise < PromiseApi
     end
 end
 
+#Implements Future
 class Future < PromiseApi
+    #Constructing object with then, success and failure functions
+    #@param [Proc,lambda] _then Then-function
+    #@param [Proc,lambda] resolve Success-function
+    #@param [Proc,lambda] reject Failure-function
     def initialize(_then, resolve=false, reject=false)
         @promise = Promise.new _then
         if resolve
@@ -634,19 +636,31 @@ class Future < PromiseApi
         end
     end
 
+
+    #@!attribute [r] resolve
+    # Success-function
+    #@return [Proc,lambda]
     def resolve
         @resolve
     end
 
+    #@!attribute [r] reject
+    # Failure-function
+    #@return [Proc,lambda]
     def reject
         @reject
     end
 
+    #@!attribute [r] promise
+    # Promise object of this Future
+    #@return [Promise]
     def promise
         @promise
     end
 end
 
+#Creates Future object for JSON-RPC Server response
+#@return [Future]
 def deferred()
     cb = []
     answer = false
