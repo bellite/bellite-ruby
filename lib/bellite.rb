@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+require 'rubygems'
 require 'json'
 require 'socket'
 include Socket::Constants
