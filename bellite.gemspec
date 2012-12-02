@@ -18,5 +18,5 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "redcarpet", "~> 1.17"
   gem.add_development_dependency "yard", "~> 0.7.5"
-  get.add_dependency "json"
+  gem.add_dependency "json"
 end
