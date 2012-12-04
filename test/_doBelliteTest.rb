@@ -2,8 +2,8 @@
 
 require '../lib/bellite.rb'
 app = Bellite.new
-app.ready Proc.new { 
-    puts "READY"
+
+app.on 'ready', lambda {
     app.ping
     app.version
     app.perform(142, "echo", {"name" => [nil, true, 42, "value"]})
@@ -12,8 +12,6 @@ app.ready Proc.new {
     app.unbindEvent(118, "*")
 
     app.on("testEvent", lambda { |app, eobj|
-        puts "TEST EVENT"
-        puts eobj
         if eobj['evt']
             app.perform(0, eobj['evt'])
         else
@@ -26,4 +24,5 @@ app.ready Proc.new {
 }
 
 app.timeout = false
-app.loop false
+while app.loop()
+end

@@ -5,23 +5,6 @@ require 'socket'
 include Socket::Constants
 
 
-# Clone of {http://docs.python.org/2/library/functools.html#functools.partial Python functools.partial}
-#   Creates a lambda with passed func and applies to it args. Args can be overriden when this lambda called.
-#
-#@param [Proc] func - func to be called with partial parameters
-#@param [Array] *args   - default parameters which should be passed to func
-#@return [Proc] wrapper around func which passes *args or new args, passed to wrapper to func
-def partial(func, *args)
-    return  Proc.new do |*new_args|
-        merged_params = args.clone()
-        new_args.each_with_index {|v,k|
-            merged_params[k] = new_args[k]
-        }
-        func.call(*merged_params)
-    end
-end
-
-
 # Simple implementation of {http://docs.python.org/2/library/asyncore.html Python Asyncore}
 class Async
     #!attribute @@map
@@ -87,38 +70,19 @@ class Async
     #Running check while at least one socket in objects map is connected
     #@param [Float] timeout - timeout, passed to {.check}
     #@param [Hash] map, passed to {.check}
-    def Async.loop(timeout,map=false)
-        while Async.check(timeout, map) != false
-        end
+    def Async.loop(timeout, map=false)
+        return Async.check(timeout, map) != false
     end
 end
 
-
-
-# Implements new pythonic {http://docs.python.org/2/library/stdtypes.html#dict.setdefault setdefault} method in ruby class Hash
-class Hash
-    #(see {Hash})
-    #@param key key of hash
-    #@param value value of key in hash
-    #@return [Value] if key in hash - hash value, attached to key; otherwise value, passed to setdefault
-    def setdefault(key, value)
-        if self[key] == nil
-            self[key] = value
-        end
-        return self[key]
-    end
-end
 
 
 # @abstract This is common interface of Bellite json-rpc API
 class BelliteJsonRpcApi
     #Constructor. Connects to server with cred credentials
     #@param [String] cred Credentials in format: 'host:port/token';
-    def initialize(cred)
-        cred = findCredentials(cred)
-        if cred
-            _connect(cred)
-        end
+    def initialize(cred=nil)
+        connect(cred)
     end
 
     #Authenticates with server using token
@@ -223,10 +187,28 @@ class BelliteJsonRpcApi
         end
     end
 
-    #@abstract Connecting to JSON-RPC server
+    # Return promise for ready event
+    def ready()
+        return @ready
+    end
+
+    # Connecting to JSON-RPC server
     #@param [String] host Host
     #@param [Fixnum] port Port
-    def _connect(host, port)
+    def connect(cred=nil)
+        cred = findCredentials(cred)
+        if cred
+            f_ready = deferred()
+            @ready = f_ready.promise
+            _connect(cred, f_ready)
+            return @ready
+        end
+    end
+
+    #@abstract Connecting to JSON-RPC server
+    #@param [String] cred Credentials in format: 'host:port/token';
+    #@param [Future] f_ready Ready future instance
+    def _connect(cred, f_ready)
         raise NotImplementedError, "Subclass Responsibility"
     end
 
@@ -312,13 +294,17 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     #Puts send packets to STDOUT
     #@param [String] msg Same as for _sendMessage
     def logSend(msg)
-        puts "send ==> " + JSON.fast_generate(msg)
+        if @logging
+            puts "send ==> " + JSON.fast_generate(msg)
+        end
     end
 
     #Puts received packets to STDOUT
     #@param [String] msg Same as for _sendMessage
     def logRecv(msg)
-        puts "recv ==> " + JSON.fast_generate(msg)
+        if @logging
+            puts "recv ==> " + JSON.fast_generate(msg)
+        end
     end
 
     #Receives JSON-RPC response or call from JSON-RPC Server
@@ -368,8 +354,11 @@ class BelliteJsonRpc < BelliteJsonRpcApi
 
     #Called on connect to remote JSON-RPC server. 
     #@param [Hash] cred Server credentials: port, host, token and original `credentials` string
-    def on_connect(cred)
-        auth(cred['token'])._then.call(method(:on_auth_succeeded), method(:on_auth_failed))
+    #@param [Future] f_ready Ready future instance
+    def on_connect(cred, f_ready)
+        auth(cred['token']) \
+            .then(f_ready.method(:resolve), f_ready.method(:reject)) \
+            .then(method(:on_auth_succeeded), method(:on_auth_failed))
     end
 
     #Called when auth is successfully ended
@@ -391,20 +380,13 @@ class BelliteJsonRpc < BelliteJsonRpcApi
     #~ micro event implementation ~~~~~~~~~~~~~~~~~~~~~~~
     #
 
-    #Adds ready event handler
-    #@param [Proc] fnReady Event hanlder lambda 
-    #@return [Proc] Your event handler
-    def ready(fnReady)
-        return on('ready', fnReady)
-    end
-
     #Adds any event handler
     #@param [String] key Event name like `ready`
     #@param [Proc] fn Function to bind on event
     #@return [Proc] Your event handler or bindEvent method to bind your handler later if you skip fn
     def on(key, fn=false)
         bindEvent = lambda do |fn|
-            @_evtTypeMap.setdefault(key, []) << fn
+            (@_evtTypeMap[key]||=[]) << fn
             return fn
         end
         if not fn
@@ -439,21 +421,22 @@ end
 class Bellite < BelliteJsonRpc
 
 
-#!attribute [rw] timeout 
-# Timeout of IO.select socket wait
-#@return [Float] Timeout value in seconds
+    #!attribute [rw] timeout 
+    # Timeout of IO.select socket wait
+    #@return [Float] Timeout value in seconds
     attr_accessor :timeout
 
     #Connecting to JSON-RPC server
     # Calls on_connect if connection successfull
-    #@param [Hash] cred Server credentials: port, host, token and original `credentials` string
-    def _connect(cred)
+    #@param [String] cred Credentials in format: 'host:port/token';
+    #@param [Future] f_ready Ready future instance
+    def _connect(cred, f_ready)
         @timeout = 0.5
         @conn = TCPSocket.new cred['host'], cred['port']
         @buf = ""
 
         if @conn
-            on_connect(cred)
+            on_connect(cred, f_ready)
         end
     end
 
@@ -578,22 +561,32 @@ class PromiseApi
     #Runs then-function call with same function for success and failure
     #@param [Proc] fn Function to handle success or failure
     #@return Result of then-function call
-    def always(fn)
-        return @_then.call(fn, fn)
+    def always(fn=nil, &blk)
+        return then_(fn||blk, fn||blk)
     end
 
     #Runs then-function in case of failure
     #@param [Proc] failure Failure handler
     #@return Result of then-function call
-    def fail(failure)
-        return @_then.call(false, failure)
+    def fail(failure, &blk)
+        return then_(false, failure||blk)
     end
 
     #Runs then-function in case of success
     #@param [Proc] success Success handler
     #@return Result of then-function call
-    def done(success)
-        return @_then.call(success,false)
+    def done(success, &blk)
+        return then_(success||blk,false)
+    end
+
+    def then(success=false, failure=false, &blk)
+        return then_(success, failure, &blk)
+    end
+    def then_(success=false, failure=false, &blk)
+        if (blk && (success || failure))
+            raise ArgumentError, "Ambiguous block argument"
+        end
+        return @_then.call(success,failure)
     end
 end
 
@@ -611,13 +604,6 @@ class Promise < PromiseApi
     #@return [Promise]
     def promise
         return self
-    end
-
-    #@!attribute [r] _then
-    # Then-function
-    #@return [Proc,lambda]
-    def _then
-        @_then
     end
 end
 
@@ -641,15 +627,15 @@ class Future < PromiseApi
     #@!attribute [r] resolve
     # Success-function
     #@return [Proc,lambda]
-    def resolve
-        @resolve
+    def resolve(res=true)
+        @resolve.call(res)
     end
 
     #@!attribute [r] reject
     # Failure-function
     #@return [Proc,lambda]
-    def reject
-        @reject
+    def reject(err)
+        @reject.call(err)
     end
 
     #@!attribute [r] promise
@@ -657,6 +643,10 @@ class Future < PromiseApi
     #@return [Promise]
     def promise
         @promise
+    end
+
+    def then_(success=false, failure=false)
+        return @promise.then_(success, failure)
     end
 end
 
@@ -681,11 +671,11 @@ def deferred()
 
     resolve = lambda do |result|
         while cb.size > 0
-            success, failure = cb.pop()
+            success, failure = cb.shift()
             begin
                 if success != false
-                    res = success.call(result)
-                    if res != false
+                    change, res = success.call(result)
+                    if change and res===nil
                         result = res
                     end
                 end
@@ -695,23 +685,19 @@ def deferred()
                 elsif cb.size = 0
                     #excepthook
                 end
-                if res == false
-                    return reject.call(err)
-                else
-                    return reject.call(res)
-                end
+                return reject.call(res==nil ? err : res)
             end
         end
-        answer = partial(resolve, result)
+        answer = lambda { resolve.call(result) }
     end
 
     reject = lambda do |error|
         while cb.size > 0
-            failure = cb.pop()[1]
+            failure = cb.shift()[1]
             begin
                 if failure != false
-                    res = failure.call(error)
-                    if res != false
+                    change, res = failure.call(error)
+                    if change and res===nil
                         error = res
                     end
                 end
@@ -722,9 +708,10 @@ def deferred()
                 end
             end
         end
-        answer = partial(reject, error)
+        answer = lambda { reject.call(error) }
     end
 
     future = Future.new _then, resolve, reject
     return future
 end
+
