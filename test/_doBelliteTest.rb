@@ -3,7 +3,7 @@
 require '../lib/bellite.rb'
 app = Bellite.new
 
-app.on 'ready', lambda {
+app.ready.done lambda {
     app.ping
     app.version
     app.perform(142, "echo", {"name" => [nil, true, 42, "value"]})
