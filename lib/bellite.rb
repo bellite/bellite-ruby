@@ -254,7 +254,9 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         msgId = @_nextMsgId
         @_nextMsgId += 1
         res = _newResult(msgId)
-        _sendJsonRpc(method, params, msgId)
+        if not _sendJsonRpc(method, params, msgId)
+            res.reject('Bellite client not connected')
+        end
         return res.promise
     end
 
@@ -346,9 +348,11 @@ class BelliteJsonRpc < BelliteJsonRpcApi
         end
 
         if msg.has_key?('error')
-            tgt.reject.call(msg['error'])
+            tgt.reject(msg['error'])
+        elsif msg['result'][0]
+            tgt.reject(msg['result'])
         else
-            tgt.resolve.call(msg['result'])
+            tgt.resolve(msg['result'])
         end
     end
 
