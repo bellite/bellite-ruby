@@ -1,3 +1,3 @@
 module Bellite
-  VERSION = "0.0.8"
+  VERSION = "1.4.17"
 end

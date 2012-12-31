@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["shane@techgame.net"]
   gem.description   = "Bellite JSON-RPC Client library"
   gem.summary       = "Implements connection to JSON-RPC server, calling remote methods and bindings to server events"
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/bellite/bellite-ruby"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "bellite"
   gem.require_paths = ["lib"]
   gem.version       = Bellite::VERSION
+  gem.license       = 'MIT'
 
 
   gem.add_development_dependency "redcarpet", "~> 1.17"
